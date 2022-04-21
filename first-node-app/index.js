@@ -1,9 +1,11 @@
-const { request } = require('express');
 const express = require('express');
 const cors = require('cors');
 const app = express();
-app.use(cors());
 const port = process.env.PORT || 5000;
+
+// use middleware 
+app.use(cors());
+app.use(express.json())
 
 app.get('/', (request, response) => {
     response.send("This is express nodemon sssssssseeeeee");
@@ -18,7 +20,19 @@ const users = [
 ]
 
 app.get('/users', (req, res) => {
-    res.send(users)
+    console.log(req.query)
+    const serachName = req.query.name.toLowerCase();
+    const findUser = users.filter(user => user.name.toLowerCase().includes(serachName))
+    res.send(findUser)
+})
+
+// post data 
+app.post('/user', (req, res) => {
+    const user = req.body;
+    user.id = users.length + 1;
+    users.push(user)
+    res.send(user)
+
 })
 
 app.get('/users/:id', (req, res) => {
